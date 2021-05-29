@@ -13,6 +13,7 @@ class ComputeKeskarSharpness:
         self.lr = lr 
         self.max_steps = max_steps
         
+        
     def compute_loss(self):
         loss = 0
         self.net.eval()
@@ -31,7 +32,7 @@ class ComputeKeskarSharpness:
     def compute_sharpness(self):
         stop = False
         num_steps = 0
-        final_loss = 0 
+        final_loss = 0  # l_1: 
 
         self.net.eval()
         # init loss  --> l_0
