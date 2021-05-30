@@ -13,8 +13,8 @@ class ComputeKeskarSharpness:
         self.lr = lr 
         self.max_steps = max_steps
 
-        for g in self.optimizer.param_groups:
-            g['lr'] = self.lr
+        for param_group in self.optimizer.param_groups:
+            param_group['lr'] = self.lr
         
         
     def compute_loss(self):
