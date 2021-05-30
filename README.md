@@ -46,8 +46,7 @@ To use the Knee Schedule, import the scheduler into your training file:
 >>> scheduler = KneeLRScheduler(optimizer, peak_lr, warmup_steps, explore_steps, total_steps)
 ```
 To use it during training :
-```
-python
+```python
 >>> model.train()
 >>> output = model(inputs)
 >>> loss = criterion(output, targets)
