@@ -7,7 +7,7 @@ This repo presents the wide minima density hypothesis as proposed in the followi
 ### Key contributions:
 *   Hypothesis about minima density
 *   A SOTA LR schedule that exploits the hypothesis and beats general baseline schedules
-*   Reducing wall clock training time and saving GPU compute hours with our LR schedule (Pretraining BERT_{Large} in 33%  less training steps)
+*   Reducing wall clock training time and saving GPU compute hours with our LR schedule (Pretraining BERT-Large in 33%  less training steps)
 *   SOTA BLEU score on IWSLT'14 ( DE-EN )
 
 
