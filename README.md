@@ -9,6 +9,13 @@ This repo presents the wide minima density hypothesis as proposed in the followi
 *   A SOTA LR schedule that exploits the hypothesis and beats general baseline schedules
 *   SOTA BLEU score on IWSLT'14 ( DE-EN )
 
+
+### Prerequisite: 
+* CUDA, cudnn
+* Python 3.6+
+* PyTorch 1.4.0
+
+
 ### Measuring width of a minima
 Keskar et.al 2016 (https://arxiv.org/abs/1609.04836) argue that wider minima generalize much better than sharper minima. The computation method in their work uses the compute expensive LBFGS-B second order method, which is hard to scale. We use a projected gradient ascent based method, which is first order in nature and very easy to implement/use. Here is a simple way you can compute the width of the minima your model finds during training:
 
