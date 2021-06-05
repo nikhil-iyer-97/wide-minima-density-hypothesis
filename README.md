@@ -22,7 +22,7 @@ We propose a hypothesis that wide/flat minima have a lower density as compared t
 
 The following histograms show the existence of our hypothesis and how the initial learning rate plays a key role in generalization. We conduct 50 random Cifar-10 experiments with Resnet-18 for a total training budget of 200 epochs. We vary the initial phase of explore epochs with 0.1 LR, while dividing the remaining epochs with 0.01 and 0.001 LR respectively. We show that as explore epochs is increased, the sharpness of the final minima reduces and generalization on test set improves.
 
-<img src="https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/0explore/0explore_sharpness-1.png" width="150"/> <img src="https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/30explore/30explore_sharpness-1.png" width="150"/> 
+<img src="https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/0explore/0explore_sharpness-1.png" width="200"/> <img src="https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/30explore/30explore_sharpness-1.png" width="200"/> <img src="https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/60explore/60explore_sharpness-1.png" width="200"/> <img src="https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/100explore/100explore_sharpness-1.png" width="200"/> 
 
 
 ### Knee LR Schedule
