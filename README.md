@@ -20,14 +20,22 @@ This repo presents the wide minima density hypothesis as proposed in the followi
 ### Hypothesis
 We propose a hypothesis that wide/flat minima have a lower density as compared to narrow/sharp minima.  We empirically evaluate it on multiple models and datasets. We also show that the initial learning rate phase has a huge role to play in accessing/getting stuck in wider minima and keeping the initial learning rate high for a significant period of time improves the final generalization accuracy on all benchmarks. This initial high learning rate phase is termed as "explore".  
 
-The following histograms show the existence of our hypothesis and how the initial learning rate plays a key role in generalization. We conduct 50 random Cifar-10 experiments with Resnet-18 for a total training budget of 200 epochs. We vary the initial phase of explore epochs with 0.1 LR, while dividing the remaining epochs with 0.01 and 0.001 LR respectively. We show that as explore epochs is increased, the sharpness of the final minima reduces and generalization on test set improves.
+The following histograms show the existence of our hypothesis and how the initial learning rate plays a key role in generalization. We conduct Cifar-10 experiments with Resnet-18 for a total training budget of 200 epochs. We vary the initial phase of explore epochs with 0.1 LR, while dividing the remaining epochs with 0.01 and 0.001 LR respectively. This is done 50 times with different network initializations for each explore setting. We show that as explore epochs is increased, the sharpness of the final minima reduces and generalization on test set improves.
 
-The histograms below shows how sharpness changes as a function of explore:
+The histograms below shows how sharpness changes as a function of explore. The x axis depicts sharpness and y axis depicts frequency:
 
 0 explore | 30 explore | 60 explore | 100 explore
 --- | --- | --- | ---
 ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/0explore/0explore_sharpness-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/30explore/30explore_sharpness-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/60explore/60explore_sharpness-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/100explore/100explore_sharpness-1.png)
 
+
+The histograms below shows how final test accuracy changes as a function of explore. The x axis depicts accuracy and y axis depicts frequency:
+
+0 explore | 30 explore | 60 explore | 100 explore
+--- | --- | --- | ---
+![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/0explore/0explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/30explore/30explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/60explore/60explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/100explore/1000explore_acc-1.png)
+
+Please refer to section 3 in our paper for more details.
 
 ### Knee LR Schedule
 Based on the density of wide vs narrow minima , we propose the Knee LR schedule that pushes generalization boundaries further by exploiting the nature of the loss landscape. The LR schedule is an explore-exploit based schedule, where the explore phase maintains a high lr for a significant time to access and land into a wide minimum with a good probability. The exploit phase is a simple linear decay scheme, which decays the lr to zero over the exploit phase. The only hyperparameter to tune is the explore epochs/steps. We have shown that 50% of the training budget allocated for explore is good enough for landing in a wider minimum and better generalization, thus removing the need for hyperparameter tuning.
