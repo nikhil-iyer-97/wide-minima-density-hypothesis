@@ -37,7 +37,7 @@ The histograms below shows how final test accuracy changes as a function of expl
 
 Please refer to section 3 in our paper for more details.
 
-*   PS: We recently wrote another paper where we use our hypothesis to automatically tune the learning rate on various datasets/models. We show boosts in test accuracy as well as reducing training time/steps required for generalization.[Link](https://arxiv.org/abs/2105.14526). 
+*   PS: We recently wrote another paper where we use our hypothesis to automatically tune the learning rate on various datasets/models. We show boosts in test accuracy as well as reducing training time/steps required for generalization [Link](https://arxiv.org/abs/2105.14526) 
 
 ### Knee LR Schedule
 Based on the density of wide vs narrow minima , we propose the Knee LR schedule that pushes generalization boundaries further by exploiting the nature of the loss landscape. The LR schedule is an explore-exploit based schedule, where the explore phase maintains a high lr for a significant time to access and land into a wide minimum with a good probability. The exploit phase is a simple linear decay scheme, which decays the lr to zero over the exploit phase. The only hyperparameter to tune is the explore epochs/steps. We have shown that 50% of the training budget allocated for explore is good enough for landing in a wider minimum and better generalization, thus removing the need for hyperparameter tuning.
