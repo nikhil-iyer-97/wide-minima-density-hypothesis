@@ -33,7 +33,7 @@ The histograms below shows how final test accuracy changes as a function of expl
 
 0 explore | 30 explore | 60 explore | 100 explore
 --- | --- | --- | ---
-![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/0explore/0explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/30explore/30explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/60explore/60explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/100explore/1000explore_acc-1.png)
+![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/0explore/0explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/30explore/30explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/60explore/60explore_acc-1.png) | ![](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/plots/100explore/100explore_acc-1.png)
 
 Please refer to section 3 in our paper for more details.
 
