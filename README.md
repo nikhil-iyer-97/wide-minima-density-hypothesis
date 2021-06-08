@@ -25,7 +25,7 @@ The following table shows comparison of our LR schedule against baseline LR sche
 
 ![short budget](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/tables/short%20budget.PNG)
 
-The following table shows comparison of our LR schedule against the inverse square root schedule used by the current SOTA model on IWSLT'14(DE-EN) [*Cutoff](https://arxiv.org/abs/2009.13818). This comparison is done over the full training budget as well as a shorter training budget. For more details, please refer to section 5.3.6 in our paper.
+The following table shows comparison of our LR schedule against the inverse square root schedule used by the current SOTA model on IWSLT'14(DE-EN) [Cutoff](https://arxiv.org/abs/2009.13818). This comparison is done over the full training budget as well as a shorter training budget. For more details, please refer to section 5.3.6 in our paper.
 
 ![sota](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/tables/sota_iwslt.PNG)
 
