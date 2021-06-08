@@ -16,7 +16,7 @@ This repo presents the wide minima density hypothesis as proposed in the followi
 * Python 3.6+
 * PyTorch 1.4.0
 
-### Key Results
+### Main Results
 The following table shows comparison of our LR schedule against baseline LR schedules as well as popular LR schedulers available in Pytorch. This comparison is done over the full training budget. For more details about baseline schedules and our LR schedule , please refer to section 5.3 in our paper.
 
 ![full budget](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/tables/full_budget.PNG)
