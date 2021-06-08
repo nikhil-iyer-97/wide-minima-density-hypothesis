@@ -16,6 +16,11 @@ This repo presents the wide minima density hypothesis as proposed in the followi
 * Python 3.6+
 * PyTorch 1.4.0
 
+### Key Results
+The following table shows comparison of our LR schedule against baseline LR schedules as well as popular LR schedulers available in Pytorch. This comparison is done over the full training budget. 
+
+![full budget](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/tables/full_budget.png)
+
 
 ### Hypothesis
 We propose a hypothesis that wide/flat minima have a lower density as compared to narrow/sharp minima.  We empirically evaluate it on multiple models and datasets. We also show that the initial learning rate phase has a huge role to play in accessing/getting stuck in wider minima and keeping the initial learning rate high for a significant period of time improves the final generalization accuracy on all benchmarks. This initial high learning rate phase is termed as "explore".  
