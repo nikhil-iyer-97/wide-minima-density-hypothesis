@@ -17,15 +17,15 @@ This repo presents the wide minima density hypothesis as proposed in the followi
 * PyTorch 1.4.0
 
 ### Main Results
-The following table shows comparison of our LR schedule against baseline LR schedules as well as popular LR schedulers available in Pytorch. This comparison is done over the full training budget. For more details about baseline schedules and our LR schedule , please refer to section 5.3 in our paper.
+* The following table shows comparison of our LR schedule against baseline LR schedules as well as popular LR schedulers available in Pytorch. This comparison is done over the full training budget. For more details about baseline schedules and our LR schedule , please refer to section 5.3 in our paper.
 
 ![full budget](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/tables/full_budget.PNG)
 
-The following table shows comparison of our LR schedule against baseline LR schedules as well as popular LR schedulers available in Pytorch. This comparison is done over a shorter training budget to see how well each schedule generalizes. We demonstrate that our schedule trained with a shorter budget compares with baselines trained on the full budget ( see above table for full budget ). Our hypothesis enables us to save a lot of epochs, thus requiring less GPU utilization. For more details about baseline schedules and our LR schedule , please refer to section 5.3 in our paper.
+* The following table shows comparison of our LR schedule against baseline LR schedules as well as popular LR schedulers available in Pytorch. This comparison is done over a shorter training budget to see how well each schedule generalizes. We demonstrate that our schedule trained with a shorter budget compares with baselines trained on the full budget ( see above table for full budget ). Our hypothesis enables us to save a lot of epochs, thus requiring less GPU utilization. For more details about baseline schedules and our LR schedule , please refer to section 5.3 in our paper.
 
 ![short budget](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/tables/short%20budget.PNG)
 
-The following table shows comparison of our LR schedule against the inverse square root schedule used by the current SOTA model on IWSLT'14(DE-EN) [Cutoff](https://arxiv.org/abs/2009.13818). This comparison is done over the full training budget as well as a shorter training budget. For more details, please refer to section 5.3.6 in our paper.
+* The following table shows comparison of our LR schedule against the inverse square root schedule used by the current SOTA model on IWSLT'14(DE-EN) [Cutoff](https://arxiv.org/abs/2009.13818). This comparison is done over the full training budget as well as a shorter training budget. For more details, please refer to section 5.3.6 in our paper.
 
 ![sota](https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis/blob/main/tables/sota_iwslt.PNG)
 
