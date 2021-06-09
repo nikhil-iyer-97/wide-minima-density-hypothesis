@@ -14,7 +14,7 @@ This repo presents the wide minima density hypothesis as proposed in the followi
 ### Prerequisite: 
 * CUDA, cudnn
 * Python 3.6+
-* PyTorch 1.4.0
+* PyTorch 1.4+
 
 ### Main Results
 * The following table shows comparison of our LR schedule against baseline LR schedules as well as popular LR schedulers available in Pytorch. This comparison is done over the full training budget. For more details about baseline schedules and our LR schedule , please refer to section 5.3 in our paper.
@@ -60,7 +60,8 @@ Based on the density of wide vs narrow minima , we propose the Knee LR schedule 
 To use the Knee Schedule, import the scheduler into your training file:
 ```python
 >>> from knee_lr_schedule import KneeLRScheduler
->>> scheduler = KneeLRScheduler(optimizer, peak_lr, warmup_steps, explore_steps, total_steps)
+>>> scheduler = KneeLRScheduler(optimizer, max_lr, total_steps=total_steps, 
+                                pct_start=pct_start, pct_explore=pct_explore)
 ```
 To use it during training :
 ```python
@@ -73,13 +74,40 @@ To use it during training :
 ```
 
 Details about args:
-- `optimizer`: optimizer needed for training the model ( SGD/Adam )
-- `peak_lr`: the peak learning required for explore phase to escape narrow minimas
-- `warmup_steps`: steps required for warmup( usually needed for adam optimizers/ large batch training) Default value: 0
-- `explore_steps`: total steps for explore phase.
-- `total_steps`: total training budget steps for training the model
-
-
+- `optimizer`: Optimizer needed for training the model ( SGD and Adam has compatibility with cycle_momentum).
+- `max_lr` (float): The peak learning required for explore phase to escape narrow minimums.
+- `total_steps` (int): The total number of steps in the cycle. Note that if a value is not provided here, 
+  then it must be inferred by providing a value for epochs and steps_per_epoch.
+- `epochs` (int): The number of epochs to train for. This is used along with steps_per_epoch in order to infer 
+  the total number of steps in the cycle if a value for total_steps is not provided.
+- `steps_per_epoch` (int): The number of steps per epoch to train for. This is used along with epochs in order to 
+  infer the total number of steps in the cycle if a value for total_steps is not provided.
+- `pct_start` (float): The percentage of the total steps spent increasing the learning rate.
+- `pct_explore` (float): The percentage of the total steps spent on explore phase (keeping max the learning rate).
+- `cycle_momentum` (bool): If ``True``, momentum is cycled inversely
+    to learning rate between 'base_momentum' and 'max_momentum'.
+- `base_momentum` (float or list): Lower momentum boundaries in the cycle
+    for each parameter group. Note that momentum is cycled inversely
+    to learning rate; at the peak of a cycle, momentum is
+    'base_momentum' and learning rate is 'max_lr'.
+- `max_momentum` (float or list): Upper momentum boundaries in the cycle
+    for each parameter group. Functionally,
+    it defines the cycle amplitude (max_momentum - base_momentum).
+    Note that momentum is cycled inversely
+    to learning rate; at the start of a cycle, momentum is 'max_momentum'
+    and learning rate is 'base_lr'.
+- `div_factor` (float): Determines the initial learning rate via
+    initial_lr = max_lr/div_factor
+- `final_div_factor` (float): Determines the minimum learning rate via
+    min_lr = initial_lr/final_div_factor
+- `last_epoch` (int): The index of the last batch. This parameter is used when
+    resuming a training job. Since `step()` should be invoked after each
+    batch instead of after each epoch, this number represents the total
+    number of *batches* computed, not the total number of epochs computed.
+    When last_epoch=-1, the schedule is started from the beginning.
+- `verbose` (bool): If ``True``, prints a message to stdout for
+    each update.
+  
 ### Measuring width of a minima
 Keskar et.al 2016 (https://arxiv.org/abs/1609.04836) argue that wider minima generalize much better than sharper minima. The computation method in their work uses the compute expensive LBFGS-B second order method, which is hard to scale. We use a projected gradient ascent based method, which is first order in nature and very easy to implement/use. Here is a simple way you can compute the width of the minima your model finds during training:
 
