@@ -8,43 +8,34 @@ from torch.optim.optimizer import Optimizer
 class KneeLRScheduler(_LRScheduler):
     """
     `Wide-minima Density Hypothesis and the Explore-Exploit Learning Rate Schedule`
-    Implementation of the paper https://arxiv.org/pdf/2003.03977.pdf from
+    Implementation of the paper https://arxiv.org/pdf/2003.03977.pdf
     Taken from https://github.com/nikhil-iyer-97/wide-minima-density-hypothesis
+
+    Allows the optimizer to explore the loss landscape with a high learning rate for 
+    accessing and landing in a wide minimum based on the hypothesis on minima density.
+    The LR is constant for the entire explore phase and the exploit phase decays the LR
+    linearly to zero. Warmup is complementary and can be added to the schedule.  
 
 
     You must either provide a value for total_steps or provide a value for both
-    epochs and steps_per_epoch.
+    epochs and steps_per_epoch. Warmup and explore are set to zero by default. If
+    no values have been provided, it will linearly decay from max_lr to zero.
 
     Args:
         optimizer: Optimizer needed for training the model ( SGD/Adam ).
-        max_lr: The peak learning required for explore phase to escape narrow minimums.
-        total_steps: The total number of steps in the cycle. Note that
+        max_lr (float): The peak learning required for explore phase to escape narrow minimums.
+        total_steps (int): The total number of steps in the cycle. Note that
             if a value is not provided here, then it must be inferred by providing
             a value for epochs and steps_per_epoch.
-        epochs: The number of epochs to train for. This is used along
+        epochs (int): The number of epochs to train for. This is used along
             with steps_per_epoch in order to infer the total number of steps in the cycle
             if a value for total_steps is not provided.
-        steps_per_epoch: The number of steps per epoch to train for. This is
+        steps_per_epoch (int): The number of steps per epoch to train for. This is
             used along with epochs in order to infer the total number of steps in the
             cycle if a value for total_steps is not provided.
-        pct_start: The percentage of the total steps spent increasing the learning rate.
-        pct_explore: The percentage of the total steps spent on explore phase (keeping max the learning rate).
-        cycle_momentum (bool): If ``True``, momentum is cycled inversely
-            to learning rate between 'base_momentum' and 'max_momentum'.
-        base_momentum (float or list): Lower momentum boundaries in the cycle
-            for each parameter group. Note that momentum is cycled inversely
-            to learning rate; at the peak of a cycle, momentum is
-            'base_momentum' and learning rate is 'max_lr'.
-        max_momentum (float or list): Upper momentum boundaries in the cycle
-            for each parameter group. Functionally,
-            it defines the cycle amplitude (max_momentum - base_momentum).
-            Note that momentum is cycled inversely
-            to learning rate; at the start of a cycle, momentum is 'max_momentum'
-            and learning rate is 'base_lr'.
-        div_factor (float): Determines the initial learning rate via
-            initial_lr = max_lr/div_factor
-        final_div_factor (float): Determines the minimum learning rate via
-            min_lr = initial_lr/final_div_factor
+        warmup (float): The percentage of the total steps spent increasing the learning rate ( default: 0 )
+        explore (float): The percentage of the total steps spent on explore phase (keeping max_lr 
+            as the learning rate). Default : 0
         last_epoch (int): The index of the last batch. This parameter is used when
             resuming a training job. Since `step()` should be invoked after each
             batch instead of after each epoch, this number represents the total
@@ -55,7 +46,7 @@ class KneeLRScheduler(_LRScheduler):
     """
 
     def __init__(self, optimizer: Optimizer, max_lr: Union[List[float], float], total_steps: int = None,
-                 epochs: int = None, steps_per_epoch: int = None, pct_start: int = 0.3, pct_explore: int = 0.4,
+                 epochs: int = None, steps_per_epoch: int = None, warmup: int = 0.3, explore: int = 0.4,
                  cycle_momentum=True, base_momentum=0.85, max_momentum=0.95,
                  div_factor: float = 25., final_div_factor: float = 1e4, last_epoch: int = -1, verbose: bool = False):
 
@@ -78,17 +69,17 @@ class KneeLRScheduler(_LRScheduler):
                 raise ValueError("Expected positive integer steps_per_epoch, but got {}".format(steps_per_epoch))
             self.total_steps = epochs * steps_per_epoch
 
-        # Validate pct_start
-        if pct_start < 0 or pct_start > 1 or not isinstance(pct_start, float):
-            raise ValueError(f"Expected float between 0 and 1 pct_start, but got {pct_start}")
+        # Validate warmup
+        if warmup < 0 or warmup > 1 or not isinstance(warmup, float):
+            raise ValueError(f"Expected float between 0 and 1 warmup, but got {warmup}")
 
-        # Validate pct_explore
-        if pct_explore < 0 or pct_explore > 1 - pct_start or not isinstance(pct_explore, float):
-            raise ValueError(f"Expected float between 0 and (1-pct_start) pct_explore, but got {pct_explore}")
+        # Validate explore
+        if explore < 0 or explore > 1 - warmup or not isinstance(explore, float):
+            raise ValueError(f"Expected float between 0 and (1-warmup) explore, but got {explore}")
 
         self.max_lr = max_lr
-        self.warmup_steps = self.total_steps * pct_start
-        self.explore_steps = self.total_steps * pct_explore
+        self.warmup_steps = self.total_steps * warmup
+        self.explore_steps = self.total_steps * explore
         self.decay_steps = self.total_steps - (self.explore_steps + self.warmup_steps)
         self.last_epoch = last_epoch
 
