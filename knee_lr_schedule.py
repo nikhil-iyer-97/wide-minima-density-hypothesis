@@ -82,7 +82,26 @@ class KneeLRScheduler(_LRScheduler):
         self.decay_steps = self.total_steps - (self.explore_steps + self.warmup_steps)
         self.last_epoch = last_epoch
 
+        max_lrs = self._format_param('max_lr', self.optimizer, self.max_lr)
+        if last_epoch == -1:
+            for idx, group in enumerate(self.optimizer.param_groups):
+                if self.warmup_steps > 0:
+                    group['initial_lr'] = max_lrs[idx] / self.warmup_steps
+                
+                group['max_lr'] = max_lrs[idx]
+                group['min_lr'] = 0
+
         super(KneeLRScheduler, self).__init__(optimizer, last_epoch, verbose)
+
+    def _format_param(self, name, optimizer, param):
+        """Return correctly formatted lr/momentum for each param group."""
+        if isinstance(param, (list, tuple)):
+            if len(param) != len(optimizer.param_groups):
+                raise ValueError("expected {} values for {}, got {}".format(
+                    len(optimizer.param_groups), name, len(param)))
+            return param
+        else:
+            return [param] * len(optimizer.param_groups)
 
     def anneal_func(self, start_lr, end_lr, pct):
         """Linearly anneal from `start` to `end` as pct goes from 0.0 to 1.0."""
