@@ -46,9 +46,8 @@ class KneeLRScheduler(_LRScheduler):
     """
 
     def __init__(self, optimizer: Optimizer, max_lr: Union[List[float], float], total_steps: int = None,
-                 epochs: int = None, steps_per_epoch: int = None, warmup: int = 0.3, explore: int = 0.4,
-                 cycle_momentum=True, base_momentum=0.85, max_momentum=0.95,
-                 div_factor: float = 25., final_div_factor: float = 1e4, last_epoch: int = -1, verbose: bool = False):
+                 epochs: int = None, steps_per_epoch: int = None, warmup: float = 0, explore: float = 0,
+                last_epoch: int = -1, verbose: bool = False):
 
         # Validate optimizer
         if not isinstance(optimizer, Optimizer):
@@ -71,60 +70,23 @@ class KneeLRScheduler(_LRScheduler):
 
         # Validate warmup
         if warmup < 0 or warmup > 1 or not isinstance(warmup, float):
-            raise ValueError(f"Expected float between 0 and 1 warmup, but got {warmup}")
+            raise ValueError(f"Expected float between 0 and 1 , but got {warmup}")
 
         # Validate explore
         if explore < 0 or explore > 1 - warmup or not isinstance(explore, float):
-            raise ValueError(f"Expected float between 0 and (1-warmup) explore, but got {explore}")
+            raise ValueError(f"Expected float between 0 and 1 , but got {explore}")
 
         self.max_lr = max_lr
-        self.warmup_steps = self.total_steps * warmup
-        self.explore_steps = self.total_steps * explore
+        self.warmup_steps = int(self.total_steps * warmup)
+        self.explore_steps = int(self.total_steps * explore)
         self.decay_steps = self.total_steps - (self.explore_steps + self.warmup_steps)
         self.last_epoch = last_epoch
 
-        assert self.decay_steps >= 0
-
-        max_lrs = self._format_param('max_lr', self.optimizer, max_lr)
-        if last_epoch == -1:
-            for idx, group in enumerate(self.optimizer.param_groups):
-                group['initial_lr'] = max_lrs[idx] / div_factor
-                group['max_lr'] = max_lrs[idx]
-                group['min_lr'] = group['initial_lr'] / final_div_factor
-
-        # Initialize momentum variables
-        self.cycle_momentum = cycle_momentum
-        if self.cycle_momentum:
-            if 'momentum' not in self.optimizer.defaults and 'betas' not in self.optimizer.defaults:
-                raise ValueError('optimizer must support momentum with `cycle_momentum` option enabled')
-            self.use_beta1 = 'betas' in self.optimizer.defaults
-            max_momentums = self._format_param('max_momentum', optimizer, max_momentum)
-            base_momentums = self._format_param('base_momentum', optimizer, base_momentum)
-            if last_epoch == -1:
-                for m_momentum, b_momentum, group in zip(max_momentums, base_momentums, optimizer.param_groups):
-                    if self.use_beta1:
-                        _, beta2 = group['betas']
-                        group['betas'] = (m_momentum, beta2)
-                    else:
-                        group['momentum'] = m_momentum
-                    group['max_momentum'] = m_momentum
-                    group['base_momentum'] = b_momentum
-
         super(KneeLRScheduler, self).__init__(optimizer, last_epoch, verbose)
 
-    def _format_param(self, name, optimizer, param):
-        """Return correctly formatted lr/momentum for each param group."""
-        if isinstance(param, (list, tuple)):
-            if len(param) != len(optimizer.param_groups):
-                raise ValueError("expected {} values for {}, got {}".format(
-                    len(optimizer.param_groups), name, len(param)))
-            return param
-        else:
-            return [param] * len(optimizer.param_groups)
-
-    def anneal_func(self, start, end, pct):
+    def anneal_func(self, start_lr, end_lr, pct):
         """Linearly anneal from `start` to `end` as pct goes from 0.0 to 1.0."""
-        return (end - start) * pct + start
+        return (end_lr - start_lr) * pct + start_lr
 
     def get_lr(self):
         if not self._get_lr_called_within_step:
@@ -136,30 +98,18 @@ class KneeLRScheduler(_LRScheduler):
 
         if step_num > self.total_steps:
             raise ValueError("Tried to step {} times. The specified number of total steps is {}"
-                             .format(step_num + 1, self.total_steps))
+                             .format(step_num, self.total_steps))
 
         for group in self.optimizer.param_groups:
             if step_num <= self.warmup_steps:
                 computed_lr = self.anneal_func(group['initial_lr'], group['max_lr'], step_num / self.warmup_steps)
-                if self.cycle_momentum:
-                    computed_momentum = self.anneal_func(group['max_momentum'], group['base_momentum'],
-                                                         step_num / self.warmup_steps)
+                
             elif step_num <= self.warmup_steps + self.explore_steps:
                 computed_lr = group['max_lr']
-                if self.cycle_momentum:
-                    computed_momentum = group['base_momentum']
             else:
                 down_step_num = step_num - (self.warmup_steps + self.explore_steps)
                 computed_lr = self.anneal_func(group['max_lr'], group['min_lr'], down_step_num / self.decay_steps)
-                if self.cycle_momentum:
-                    computed_momentum = self.anneal_func(group['base_momentum'], group['max_momentum'],
-                                                         down_step_num / self.decay_steps)
 
             lrs.append(computed_lr)
-            if self.cycle_momentum:
-                if self.use_beta1:
-                    _, beta2 = group['betas']
-                    group['betas'] = (computed_momentum, beta2)
-                else:
-                    group['momentum'] = computed_momentum
+
         return lrs
