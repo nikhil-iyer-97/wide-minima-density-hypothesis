@@ -1,3 +1,7 @@
+ 	
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/wide-minima-density-hypothesis-and-the/machine-translation-on-wmt2014-german-english)](https://paperswithcode.com/sota/machine-translation-on-wmt2014-german-english?p=wide-minima-density-hypothesis-and-the) 	
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/wide-minima-density-hypothesis-and-the/machine-translation-on-iwslt2014-german)](https://paperswithcode.com/sota/machine-translation-on-iwslt2014-german?p=wide-minima-density-hypothesis-and-the)
+
 # wide-minima-density-hypothesis
 Details about the wide minima density hypothesis and metrics to compute width of a minima
 
