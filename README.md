@@ -109,11 +109,15 @@ The above default values have been chosen after tuning and observing the loss va
 Please cite our paper in your publications if you use our work:
 
 ```latex
-@article{iyer2020wideminima,
-  title={Wide-minima Density Hypothesis and the Explore-Exploit Learning Rate Schedule},
-  author={Iyer, Nikhil and Thejas, V and Kwatra, Nipun and Ramjee, Ramachandran and Sivathanu, Muthian},
-  journal={arXiv preprint arXiv:2003.03977},
-  year={2020}
+@article{JMLR:v24:21-0549,
+  author  = {Nikhil Iyer and V. Thejas and Nipun Kwatra and Ramachandran Ramjee and Muthian Sivathanu},
+  title   = {Wide-minima Density Hypothesis and the Explore-Exploit Learning Rate Schedule},
+  journal = {Journal of Machine Learning Research},
+  year    = {2023},
+  volume  = {24},
+  number  = {65},
+  pages   = {1--37},
+  url     = {http://jmlr.org/papers/v24/21-0549.html}
 }
 ```
 
